@@ -52,13 +52,7 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         
         // Process Stickers
         NSArray *stickers = [props objectForKey: @"stickers"];
-        NSMutableArray *imageStickers = [[NSMutableArray alloc] initWithCapacity:stickers.count];
-
-        for (NSString *sticker in stickers) {
-            [imageStickers addObject: [UIImage imageNamed: sticker]];
-        }
-
-        photoEditor.stickers = imageStickers;
+        photoEditor.stickers = stickers;
         
         //Process Controls
         NSArray *hiddenControls = [props objectForKey: @"hiddenControls"];

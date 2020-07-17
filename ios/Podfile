@@ -7,13 +7,14 @@ target 'RNPhotoEditor' do
   # use_frameworks!
 
   # Pods for RNPhotoEditor
-  pod 'iOSPhotoEditor', :git => 'https://github.com/prscX/photo-editor'
+  pod 'iOSPhotoEditor', :git => 'https://github.com/mojilala/photo-editor'
+  pod 'SDWebImage', '~> 4.4.7'
 
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name.include?('iOSPhotoEditor')
         target.build_configurations.each do |config|
-          config.build_settings['SWIFT_VERSION'] = '4.1'
+          config.build_settings['SWIFT_VERSION'] = '5.0'
         end
       end
     end
