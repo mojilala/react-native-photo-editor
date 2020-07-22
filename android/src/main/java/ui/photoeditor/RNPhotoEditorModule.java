@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -69,12 +68,10 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
     //Process Stickers
     ReadableArray stickers = props.getArray("stickers");
-    ArrayList<Integer> stickersIntent = new ArrayList<Integer>();
+    ArrayList<String> stickersIntent = new ArrayList<String>();
 
     for (int i = 0;i < stickers.size();i++) {
-      int drawableId = getReactApplicationContext().getResources().getIdentifier(stickers.getString(i), "drawable", getReactApplicationContext().getPackageName());
-
-      stickersIntent.add(drawableId);
+      stickersIntent.add(stickers.getString(i));
     }
 
     //Process Hidden Controls

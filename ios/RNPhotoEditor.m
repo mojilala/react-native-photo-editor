@@ -14,13 +14,10 @@ NSString *_editImagePath = nil;
 RCTResponseSenderBlock _onDoneEditing = nil;
 RCTResponseSenderBlock _onCancelEditing = nil;
 
-- (void)doneEditingWithImage:(UIImage *)image {
+- (void)doneEditingWithImageUri:(NSString *)imageUri {
     if (_onDoneEditing == nil) return;
     
-    // Save image.
-    [UIImagePNGRepresentation(image) writeToFile:_editImagePath atomically:YES];
-    
-    _onDoneEditing(@[]);
+    _onDoneEditing(@[imageUri]);
 }
 
 - (void)canceledEditing {

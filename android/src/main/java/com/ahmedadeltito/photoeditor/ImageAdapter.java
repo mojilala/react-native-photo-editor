@@ -2,12 +2,16 @@ package com.ahmedadeltito.photoeditor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import ui.photoeditor.R;
@@ -18,13 +22,15 @@ import ui.photoeditor.R;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
-    private List<Bitmap> imageBitmaps;
+    private List<String> stickerUrls;
     private LayoutInflater inflater;
     private OnImageClickListener onImageClickListener;
+    private Context context;
 
-    public ImageAdapter(@NonNull Context context, @NonNull List<Bitmap> imageBitmaps) {
+    public ImageAdapter(@NonNull Context context, @NonNull List<String> stickerUrls) {
+        this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.imageBitmaps = imageBitmaps;
+        this.stickerUrls = stickerUrls;
     }
 
     @Override
@@ -35,12 +41,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageView.setImageBitmap(imageBitmaps.get(position));
+        Picasso.with(context)
+                .load(stickerUrls.get(position))
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return imageBitmaps.size();
+        return stickerUrls.size();
     }
 
     public void setOnImageClickListener(OnImageClickListener onImageClickListener) {
@@ -57,7 +65,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (onImageClickListener != null)
-                        onImageClickListener.onImageClickListener(imageBitmaps.get(getAdapterPosition()));
+                        onImageClickListener.onImageClickListener(((BitmapDrawable)imageView.getDrawable()).getBitmap());
                 }
             });
         }
