@@ -13,8 +13,12 @@ import com.facebook.react.bridge.ReadableMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
@@ -37,7 +41,10 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
           if (resultCode == Activity.RESULT_CANCELED) {
             mCancelCallback.invoke();
           } else {
-            mDoneCallback.invoke();
+            byte[] byteArray = intent.getByteArrayExtra("image");
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+            mDoneCallback.invoke(convert(bitmap));
           }
 
         }
@@ -48,14 +55,19 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
     }
   };
 
+  public static String convert(Bitmap bitmap)
+  {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+    return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+  }
+
   public RNPhotoEditorModule(ReactApplicationContext reactContext) {
     super(reactContext);
 
     reactContext.addActivityEventListener(mActivityEventListener);
 
   }
-
-
 
   @Override
   public String getName() {

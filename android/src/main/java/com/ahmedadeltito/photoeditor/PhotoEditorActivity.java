@@ -46,6 +46,7 @@ import com.ahmedadeltito.photoeditorsdk.ViewType;
 import com.viewpagerindicator.PageIndicator;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -419,8 +420,15 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageName = "IMG_" + timeStamp + ".jpg";
 
-                String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
-                File file = new File(selectedImagePath);
+                String folderName = "MojiLaLa";
+                File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName);
+                if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+                    Log.d("MojiLaLa", "Failed to create directory");
+                }
+
+                String selectedOutputPath = getCacheDir().getPath() + File.separator + imageName;
+                Log.d("MojiLaLa", "selected camera path " + selectedOutputPath);
+                File file = new File(selectedOutputPath);
 
                 try {
                     FileOutputStream out = new FileOutputStream(file);
@@ -435,7 +443,15 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                     var7.printStackTrace();
                 }
 
+                Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
                 Intent returnIntent = new Intent();
+                returnIntent.putExtra("image", byteArray);
+
                 setResult(Activity.RESULT_OK, returnIntent);
 
                 finish();
